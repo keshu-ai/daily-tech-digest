@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "WebFetch(domain:techcrunch.com)",
+      "WebFetch(domain:www.technologyreview.com)",
+      "WebFetch(domain:venturebeat.com)",
+      "WebFetch(domain:openai.com)",
+      "WebFetch(domain:www.theverge.com)",
+      "WebFetch(domain:www.wired.com)",
+      "WebFetch(domain:www.artificialintelligence-news.com)",
+      "WebFetch(domain:feeds.arstechnica.com)",
+      "WebFetch(domain:www.woshipm.com)",
+      "WebFetch(domain:www.ifanr.com)",
+      "WebFetch(domain:sspai.com)",
+      "WebFetch(domain:36kr.com)",
+      "WebFetch(domain:www.199it.com)",
+      "WebFetch(domain:www.jiqizhixin.com)",
+      "WebFetch(domain:www.qbitai.com)",
+      "WebFetch(domain:www.geekpark.net)"
+    ]
+  }
+}

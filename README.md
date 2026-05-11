@@ -11,6 +11,7 @@
 - [快速开始](#快速开始)
   - [作为 Claude Code Skill 安装](#作为-claude-code-skill-安装)
   - [独立 Python 脚本运行](#独立-python-脚本运行)
+- [触发方式](#触发方式)
 - [配置说明](#配置说明)
   - [自定义 RSS 源](#自定义-rss-源)
   - [权限配置](#权限配置)
@@ -125,7 +126,22 @@ python .claude/skills/daily-tech-digest/scripts/generate_digest.py https://examp
 
 ---
 
-## 配置说明
+## 触发方式
+
+安装后，在对话中直接说：
+
+```
+生成今日科技日报
+帮我抓取今天的 AI 新闻
+daily tech digest
+```
+
+也可以直接调用 skill：
+```
+/daily-tech-digest
+```
+
+---
 
 ### 自定义 RSS 源
 

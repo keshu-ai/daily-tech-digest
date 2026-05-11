@@ -75,7 +75,7 @@
 ```json
 {
   "daily-tech-digest": {
-    "github": "你的用户名/daily-tech-digest",
+    "github": "keshu-ai/daily-tech-digest",
     "ref": "main"
   }
 }

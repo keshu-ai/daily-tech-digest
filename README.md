@@ -16,14 +16,9 @@
   - [权限配置](#权限配置)
 - [输出格式](#输出格式)
 - [在主流 AI Agent 工具中使用](#在主流-ai-agent-工具中使用)
-  - [Claude Code](#1-claude-code)
-  - [Cursor](#2-cursor)
-  - [Windsurf](#3-windsurf)
-  - [Cline (VS Code)](#4-cline-vs-code)
-  - [Trae](#5-trae)
-  - [Aider](#6-aider)
-  - [GitHub Copilot Agent Mode](#7-github-copilot-agent-mode)
-  - [其他 AI Agent 工具](#8-其他-ai-agent-工具)
+  - [Claude Code](#claude-code)
+  - [OpenClaw](#openclaw)
+  - [Codex (OpenAI)](#codex-openai)
 - [RSS 源列表](#rss-源列表)
 - [常见问题](#常见问题)
 - [贡献指南](#贡献指南)
@@ -173,9 +168,9 @@ https://your-favorite-site.com/rss.xml
 
 ## 在主流 AI Agent 工具中使用
 
-本技能的核心是一个 Python 脚本 + RSS 配置文件，可以在多种 AI Agent 工具中使用。以下是各工具的接入方式：
+本技能的核心是一个 Python 脚本 + RSS 配置文件，支持在以下 AI Agent 工具中使用：
 
-### 1. Claude Code
+### Claude Code
 
 > **原生支持** — 这是本项目的主要使用场景。
 
@@ -202,203 +197,55 @@ claude
 
 ---
 
-### 2. Cursor
+### OpenClaw
 
-> **通过 Rules 或终端集成**
+> **通过 Skill 目录集成**
 
-[Cursor](https://cursor.com) 是基于 VS Code 的 AI 编辑器，内置 AI Agent 能力。
+[OpenClaw](https://openclaw.ai) 是另一个支持 Skill 系统的 AI Agent 工具。
 
-**方式一：通过 `.cursor/rules` 配置**
+**安装步骤：**
 
-在项目根目录创建 `.cursor/rules/daily-tech-digest.mdc`：
+1. 克隆仓库到本地
+2. 将 `.claude/skills/daily-tech-digest/` 复制到 OpenClaw 的 skills 目录下（通常为 `~/.openclaw/skills/`）
+3. 安装 Python 依赖：
 
-```markdown
----
-description: 生成每日科技资讯摘要
-globs: ["科技日报_*.md"]
-alwaysApply: false
----
-
-当用户要求生成科技日报或每日科技摘要时：
-
-1. 运行以下命令安装依赖（如未安装）：
-   ```bash
-   pip install feedparser requests
-   ```
-
-2. 运行脚本生成日报：
-   ```bash
-   python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-   ```
-
-3. 打开生成的 `科技日报_YYYYMMDD.md` 文件。
+```bash
+pip install feedparser requests
 ```
 
-**方式二：在 Cursor Chat/Composer 中直接运行**
+**配置权限：**
 
-```
-@terminal pip install feedparser requests && python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-```
+在 `~/.openclaw/settings.local.json` 中添加 WebFetch 权限，参考 `settings.example.json`。
+
+**使用：** 在 OpenClaw 对话中直接触发 skill。
 
 ---
 
-### 3. Windsurf
+### Codex (OpenAI)
 
-> **通过 Rules 或 Cascade 集成**
+> **通过 Custom Instructions 集成**
 
-[Windsurf](https://windsurf.com) (原 Codeium) 是另一个流行的 AI 编辑器。
+[Codex](https://openai.com/codex) 是 OpenAI 推出的 AI 编程助手。
 
-**通过 `.windsurfrules` 配置：**
+**手动集成：**
 
-在项目根目录创建 `.windsurfrules`：
+1. 将 `scripts/generate_digest.py` 和 `references/sources.list` 复制到项目根目录
+2. 安装依赖：
 
+```bash
+pip install feedparser requests
 ```
-当用户要求生成科技日报时，执行以下步骤：
-1. 确认 Python 依赖已安装：pip install feedparser requests
-2. 运行脚本：python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-3. 日报会生成在当前目录，文件名为 科技日报_YYYYMMDD.md
-```
-
-**在 Cascade 中使用：**
-
-直接在 Windsurf 的 Cascade 面板中输入：
-```
-帮我运行 python .claude/skills/daily-tech-digest/scripts/generate_digest.py 生成今日科技日报
-```
-
----
-
-### 4. Cline (VS Code)
-
-> **通过 Custom Instructions 或 MCP 集成**
-
-[Cline](https://github.com/cline/cline) 是 VS Code 上功能强大的 AI Agent 插件。
 
 **通过 Custom Instructions 配置：**
 
-在 Cline 设置中的 "Custom Instructions" 添加：
+在 Codex 的 Custom Instructions 或项目配置中添加：
 
 ```
-当用户要求生成科技日报或每日科技摘要时：
-1. 检查并安装依赖：pip install feedparser requests
-2. 执行脚本：python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-3. 脚本会在当前目录生成 科技日报_YYYYMMDD.md
-4. 读取生成的文件并展示给用户
+当用户要求生成科技日报时，执行以下命令：
+python generate_digest.py
 ```
 
-**通过 `.clinerules` 文件配置：**
-
-在项目根目录创建 `.clinerules`：
-
-```
-# Daily Tech Digest
-
-本项目包含一个科技日报生成工具，位于 .claude/skills/daily-tech-digest/。
-用户说"生成日报"时，运行 python .claude/skills/daily-tech-digest/scripts/generate_digest.py。
-依赖：feedparser, requests（通过 pip 安装）。
-```
-
----
-
-### 5. Trae
-
-> **通过 Rules 集成**
-
-[Trae](https://trae.ai) 是字节跳动推出的 AI IDE。
-
-**通过项目 Rules 配置：**
-
-在 Trae 的 Rules 设置中添加项目级规则：
-
-```
-# 每日科技摘要
-
-当用户要求生成科技日报时：
-1. 安装依赖：pip install feedparser requests
-2. 执行：python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-3. 输出文件：科技日报_YYYYMMDD.md
-```
-
-或者将 skill 目录放到 `.trae/skills/` 下，Trae 也支持类似的 Skill 加载机制。
-
----
-
-### 6. Aider
-
-> **通过对话直接运行**
-
-[Aider](https://aider.chat) 是一个终端内的 AI pair-programming 工具。
-
-**使用方式：**
-
-```bash
-# 启动 aider
-aider
-
-# 在 aider 中执行
-/run pip install feedparser requests
-/run python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-```
-
-**配合 `.aider.conf.yml` 自动加载上下文：**
-
-```yaml
-read:
-  - .claude/skills/daily-tech-digest/SKILL.md
-```
-
----
-
-### 7. GitHub Copilot Agent Mode
-
-> **通过 Instructions 和终端集成**
-
-GitHub Copilot 的 Agent Mode（VS Code 中的 Copilot Chat）支持终端命令执行。
-
-**通过 `.github/copilot-instructions.md` 配置：**
-
-```markdown
-## 科技日报生成
-
-当用户要求生成科技日报或 daily tech digest 时：
-1. 安装依赖：`pip install feedparser requests`
-2. 运行：`python .claude/skills/daily-tech-digest/scripts/generate_digest.py`
-3. 生成的文件名格式为 `科技日报_YYYYMMDD.md`
-```
-
-**在 Copilot Chat 中使用：**
-
-```
-@workspace /terminal python .claude/skills/daily-tech-digest/scripts/generate_digest.py
-```
-
----
-
-### 8. 其他 AI Agent 工具
-
-本工具的核心是一个标准的 Python 脚本，可以在任何支持运行 Shell 命令的 AI Agent 中使用：
-
-| 工具 | 接入方式 |
-|------|---------|
-| **Continue.dev** | 在 `.continue/config.json` 中添加 Custom Slash Command |
-| **Codium/Qodo** | 在 Chat 中直接请求运行脚本 |
-| **Amazon Q Developer** | 通过终端命令执行 |
-| **Tabnine Chat** | 在 Chat 中请求运行命令 |
-| **Devin / OpenHands** | 在任务描述中指明脚本路径 |
-| **AutoGPT / CrewAI** | 将脚本封装为 Tool/Action |
-
-**通用集成方式：**
-
-```python
-# 作为 Python 模块导入
-import sys
-sys.path.insert(0, '.claude/skills/daily-tech-digest/scripts')
-from generate_digest import generate_digest
-
-content = generate_digest()
-with open('output.md', 'w', encoding='utf-8') as f:
-    f.write(content)
-```
+脚本会在当前目录生成 `科技日报_YYYYMMDD.md`。
 
 ---
 
